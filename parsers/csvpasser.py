@@ -9,10 +9,14 @@ def importcsv(path):
     with open(path, "r", encoding="utf-8", errors="ignore") as file:
         reader = csv.DictReader(file)
         for row in reader:
+            # sender,receiver,date,subject,body,label,urls
             results.append({
-                "subject": "",
-                "body": row["Email Text"],
-                "urls": [],
-                "label": row["Email Type"]
+                "sender":   row["sender"],
+                "receiver": row["receiver"],
+                "date":     row["date"],
+                "subject":  row["subject"],
+                "body":     row["body"],
+                "label":    row["label"],
+                "urls":     row["urls"]
             })
     return results
