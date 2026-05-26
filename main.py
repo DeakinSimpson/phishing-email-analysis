@@ -1,8 +1,6 @@
 import analyser
 from parsers import csvpasser
 
-path = "phishing-email-analysis/data/Phishing_Email.csv"
+path = "phishing-email-analysis/data/CEAS_08.csv"
 
 result = csvpasser.importcsv(path)
-
-print(result[0]["subject"])
