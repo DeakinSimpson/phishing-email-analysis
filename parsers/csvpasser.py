@@ -21,8 +21,8 @@ def importcsv(path):
                     "label":    row["label"],
                     "urls":     re.findall(r'(https?://[^\s]+)', row["body"])   # thgis uses regex to grab the URLs from the email and converts to array
                 })
-    except:
+    except Exception as e:
         print(f"File {path} failed to open")
-        return False
+        return None
     
     return results
