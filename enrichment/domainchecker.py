@@ -25,11 +25,21 @@ def getdomaininfo(url):
         return None
 
 # input must be the dict that is returned by getdomaininfo() 
-def getage(domaininfo, date=datetime.now()):
-    if isinstance(date, str):
-        date = datetime.fromisoformat(date)
-    
-    creation = datetime.fromtimestamp(domaininfo["creation_date"])
-    age = (date - creation).days
+def getage(domaininfo, date=datetime.now(), print_exceptions=False):
+    try:
+        # if a string is inputted convert it to a datetime format
+        if isinstance(date, str):
+            date = datetime.fromisoformat(date)
+        
+        creation = datetime.fromtimestamp(domaininfo["creation_date"])
+        agetoexpiry = (datetime.fromtimestamp(domaininfo["expiration_date"]) - creation).days
+        agefromnow = (date - creation).days
 
-    return age
+        if agefromnow < agetoexpiry:
+            return agefromnow
+        else:
+            return agetoexpiry
+    except Exception as e:
+        print(f"Unable to get domain age information for {domaininfo["registrar"]}")
+        if print_exceptions: print(e)
+        return None
