@@ -1,6 +1,7 @@
 def importcsv(path):
     import csv
     import sys
+    import re
     # added maxsize as csv had a limit on numver of lines it could read
     csv.field_size_limit(sys.maxsize)
     results = []
@@ -10,7 +11,7 @@ def importcsv(path):
         with open(path, "r", encoding="utf-8", errors="ignore") as file:
             reader = csv.DictReader(file)
             for row in reader:
-                # sender,receiver,date,subject,body,label,urls
+                # converts each row into its own dicts
                 results.append({
                     "sender":   row["sender"],
                     "receiver": row["receiver"],
@@ -18,9 +19,10 @@ def importcsv(path):
                     "subject":  row["subject"],
                     "body":     row["body"],
                     "label":    row["label"],
-                    "urls":     row["urls"]
+                    "urls":     re.findall(r'(https?://[^\s]+)', row["body"])   # thgis uses regex to grab the URLs from the email and converts to array
                 })
     except:
         print(f"File {path} failed to open")
+        return False
     
     return results
