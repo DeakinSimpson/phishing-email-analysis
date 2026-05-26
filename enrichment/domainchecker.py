@@ -1,5 +1,6 @@
 import requests
 import config
+from datetime import datetime
 
 # parses urls and extracts the domain
 def urlparse(url):
@@ -10,7 +11,7 @@ def urlparse(url):
 def getdomaininfo(url):
     try:
         domain = urlparse(url)
-        response = requests.get("https://api.api-ninjas.com/v1/whois?domain=" + domain, headers={"X-Api-Key": config.APININJAS_API_KEY})
+        response = requests.get("https://api.api-ninjas.com/v1/whois",params={"domain": domain}, headers={"X-Api-Key": config.APININJAS_API_KEY})
         data = response.json()
 
         return {
@@ -22,4 +23,13 @@ def getdomaininfo(url):
     except Exception as e:
         print(e)
         return None
+
+# input must be the dict that is returned by getdomaininfo() 
+def getage(domaininfo, date=datetime.now()):
+    if isinstance(date, str):
+        date = datetime.fromisoformat(date)
     
+    creation = datetime.fromtimestamp(domaininfo["creation_date"])
+    age = (date - creation).days
+
+    return age
