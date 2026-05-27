@@ -1,27 +1,15 @@
 from enrichment import domainchecker, virustotal, ipinfochecker, abuseipdbchecker
 from datetime import datetime
-import json
-import os
 import hashlib
 import config
+import cachemethods
 
-def load_cache(filepath):
-    if os.path.exists(filepath):
-        try:
-            with open(filepath, "r") as f:
-                return json.load(f)
-        except json.JSONDecodeError:
-            return {}
-    else: return {}
 
-def save_cache(filepath, cache):
-    with open(filepath, "w") as f:
-        json.dump(cache, f, indent=4)
 
 def extractDataToJSON(email_body, url, file_path, data_index, date=datetime.now()):
     domain = domainchecker.urlparse(url)
-    cache = load_cache(config.URL_CACHE_PATH)
-    email_cache = load_cache(config.EMAIL_CACHE_PATH)
+    cache = cachemethods.load_cache(config.URL_CACHE_PATH)
+    email_cache = cachemethods.load_cache(config.EMAIL_CACHE_PATH)
     email_body_hash = hashlib.md5(email_body.encode()).hexdigest()
 
     # check for domain
@@ -63,5 +51,5 @@ def extractDataToJSON(email_body, url, file_path, data_index, date=datetime.now(
     if url not in email_cache[email_body_hash]["urls"]:
         email_cache[email_body_hash]["urls"].append(url)
     
-    save_cache(config.URL_CACHE_PATH, cache)
-    save_cache(config.EMAIL_CACHE_PATH, email_cache)
+    cachemethods.save_cache(config.URL_CACHE_PATH, cache)
+    cachemethods.save_cache(config.EMAIL_CACHE_PATH, email_cache)
