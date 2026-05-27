@@ -1,6 +1,7 @@
 import requests
 import config
 from datetime import datetime
+import traceback
 
 # parses urls and extracts the domain
 def urlparse(url):
@@ -31,15 +32,25 @@ def getage(domaininfo, date=datetime.now(), print_exceptions=False):
         if isinstance(date, str):
             date = datetime.fromisoformat(date)
         
-        creation = datetime.fromtimestamp(domaininfo["creation_date"])
-        agetoexpiry = (datetime.fromtimestamp(domaininfo["expiration_date"]) - creation).days
+        creation_date = domaininfo["creation_date"]
+        expiration_date = domaininfo["expiration_date"]
+
+        if isinstance(creation_date, list):
+            creation_date = creation_date[0]
+        if isinstance(expiration_date, list):
+            expiration_date = expiration_date[0]
+
+        creation = datetime.fromtimestamp(creation_date)
+        expiration = datetime.fromtimestamp(expiration_date)
+
+        agetoexpiry = (expiration - creation).days
         agefromnow = (date - creation).days
 
         if agefromnow < agetoexpiry:
             return agefromnow
         else:
             return agetoexpiry
-    except Exception as e:
+    except:
         print(f"Unable to get domain age information for {domaininfo["registrar"]}")
-        if print_exceptions: print(e)
+        if print_exceptions: print(traceback.format_exc())
         return None
