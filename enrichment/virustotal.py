@@ -1,5 +1,6 @@
 import requests
 import config
+import time
 
 def scanurl(url):
     endpoint = "https://www.virustotal.com/api/v3/urls"
@@ -14,14 +15,12 @@ def scanurl(url):
     try:
         response = requests.post(endpoint, headers=headers, data=data)
 
-        analysis_response = requests.get(response.json()["data"]["links"]["self"], headers=headers)
-
-        # stats = {
-        #     "malicious": analysis_response.json()["data"]["attributes"]["stats"]["malicious"],
-        #     "suspicious": analysis_response.json()["data"]["attributes"]["stats"]["suspicious"]
-        # }
-
-        return analysis_response
+        while True:
+            analysis_response = requests.get(response.json()["data"]["links"]["self"], headers=headers)
+            result = analysis_response.json()
+            if result["data"]["attributes"]["status"] == "completed":
+                return analysis_response
+            time.sleep(3)
     except:
         return None
     
