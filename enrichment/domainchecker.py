@@ -15,11 +15,7 @@ def getdomaininfo(url):
         response = requests.get("https://api.api-ninjas.com/v1/whois",params={"domain": domain}, headers={"X-Api-Key": config.APININJAS_API_KEY})
         data = response.json()
 
-        return {
-            "registrar": data.get("registrar"),
-            "creation_date": data.get("creation_date"),
-            "expiration_date": data.get("expiration_date")
-        }
+        return data
 
     except Exception as e:
         print(e)
@@ -28,12 +24,17 @@ def getdomaininfo(url):
 # input must be the dict that is returned by getdomaininfo() 
 def getage(domaininfo, date=datetime.now(), print_exceptions=False):
     try:
+        data = {
+            "registrar": domaininfo.get("registrar"),
+            "creation_date": domaininfo.get("creation_date"),
+            "expiration_date": domaininfo.get("expiration_date")
+        }
         # if a string is inputted convert it to a datetime format
         if isinstance(date, str):
             date = datetime.fromisoformat(date)
         
-        creation_date = domaininfo["creation_date"]
-        expiration_date = domaininfo["expiration_date"]
+        creation_date = data["creation_date"]
+        expiration_date = data["expiration_date"]
 
         if isinstance(creation_date, list):
             creation_date = creation_date[0]
@@ -51,6 +52,6 @@ def getage(domaininfo, date=datetime.now(), print_exceptions=False):
         else:
             return agetoexpiry
     except:
-        print(f"Unable to get domain age information for {domaininfo["registrar"]}")
+        print(f"Unable to get domain age information for {data["registrar"]}")
         if print_exceptions: print(traceback.format_exc())
         return None

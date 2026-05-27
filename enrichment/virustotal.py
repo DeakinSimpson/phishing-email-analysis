@@ -16,12 +16,12 @@ def scanurl(url):
 
         analysis_response = requests.get(response.json()["data"]["links"]["self"], headers=headers)
 
-        stats = {
-            "malicious": analysis_response.json()["data"]["attributes"]["stats"]["malicious"],
-            "suspicious": analysis_response.json()["data"]["attributes"]["stats"]["suspicious"]
-        }
+        # stats = {
+        #     "malicious": analysis_response.json()["data"]["attributes"]["stats"]["malicious"],
+        #     "suspicious": analysis_response.json()["data"]["attributes"]["stats"]["suspicious"]
+        # }
 
-        return stats
+        return analysis_response
     except:
         return None
     
