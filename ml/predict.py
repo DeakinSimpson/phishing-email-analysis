@@ -1,7 +1,17 @@
 import joblib
+import os
 
-model = joblib.load("phishing-email-analysis/ml/models/model.pkl")
-vectorizer = joblib.load("phishing-email-analysis/ml/models/vectorizer.pkl")
+model = None
+vectorizer = None
+
+# loads the model is
+def load_model():
+    global model, vectorizer
+    if os.path.exists("phishing-email-analysis/ml/models/model.pkl"):
+        model = joblib.load("phishing-email-analysis/ml/models/model.pkl")
+        vectorizer = joblib.load("phishing-email-analysis/ml/models/vectorizer.pkl")
+        return True
+    return False
 
 def predict(email_body):
     # vectorize the email using the same vectorizer used in training
