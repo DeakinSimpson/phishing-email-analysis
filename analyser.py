@@ -10,9 +10,9 @@ URL_CACHE_PATH      = os.getenv("URL_CACHE_PATH")
 EMAIL_CACHE_PATH    = os.getenv("EMAIL_CACHE_PATH")
 
 def extractDataToJSON(email_body, url, file_path, data_index, date=datetime.now()):
-    domain = domainchecker.urlparse(url)
-    cache = cachemethods.load_cache(URL_CACHE_PATH)
-    email_cache = cachemethods.load_cache(EMAIL_CACHE_PATH)
+    domain          = domainchecker.urlparse(url)
+    cache           = cachemethods.load_cache(URL_CACHE_PATH)
+    email_cache     = cachemethods.load_cache(EMAIL_CACHE_PATH)
     email_body_hash = hashlib.md5(email_body.encode()).hexdigest()
 
     # check for domain
@@ -25,15 +25,15 @@ def extractDataToJSON(email_body, url, file_path, data_index, date=datetime.now(
             abuseipdb_json  = {"Could Not Resolve Domain": "Could Not Resolve Domain"}
         else:
             abuseipdb_json  = abuseipdbchecker.getabusedata(ip_info_json.ip).json()
-            ip_info_json = ip_info_json.all
-        domain_age      = domainchecker.getage(domain_info, date)
+            ip_info_json    = ip_info_json.all
+        domain_age = domainchecker.getage(domain_info, date)
 
         # create json for this domain
         cache[domain] = {
-            "ipinfo": ip_info_json,
-            "whois": domain_info,
-            "abuseipdb": abuseipdb_json,
-            "domain_age": domain_age,
+            "ipinfo":       ip_info_json,
+            "whois":        domain_info,
+            "abuseipdb":    abuseipdb_json,
+            "domain_age":   domain_age,
             "urls": {}
         }
     
@@ -46,9 +46,9 @@ def extractDataToJSON(email_body, url, file_path, data_index, date=datetime.now(
 
     if email_body_hash not in email_cache:
         email_cache[email_body_hash] = {
-            "path": file_path,
-            "index": data_index,
-            "urls": []
+            "path":     file_path,
+            "index":    data_index,
+            "urls":     []
         }
 
     if url not in email_cache[email_body_hash]["urls"]:
