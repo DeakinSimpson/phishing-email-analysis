@@ -13,9 +13,9 @@ def importcsv(path):
             for row in reader:
                 # converts each row into its own dicts
                 results.append({
-                    "labal":    row[""],
+                    "label":    row[""],
                     "body":     row["Email Text"],
-                    "type":     row["Email Type"],
+                    "type":     0 if (row["Email Type"] == "Safe Email") else 1,
                     "urls":     re.findall(r'(https?://[^\s]+)', row["Email Text"])   # thgis uses regex to grab the URLs from the email and converts to array
                 })
     except Exception as e:
