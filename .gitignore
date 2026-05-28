@@ -1,3 +1,4 @@
 config.py
 *.pyc
 /phishing-email-analysis/cache/
+.env

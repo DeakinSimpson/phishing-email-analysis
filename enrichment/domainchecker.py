@@ -1,7 +1,11 @@
 import requests
-import config
 from datetime import datetime
 import traceback
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+APININJAS_API_KEY = os.getenv("APININJAS_API_KEY")
 
 # parses urls and extracts the domain
 def urlparse(url):
@@ -12,7 +16,7 @@ def urlparse(url):
 def getdomaininfo(url):
     try:
         domain = urlparse(url)
-        response = requests.get("https://api.api-ninjas.com/v1/whois",params={"domain": domain}, headers={"X-Api-Key": config.APININJAS_API_KEY})
+        response = requests.get("https://api.api-ninjas.com/v1/whois",params={"domain": domain}, headers={"X-Api-Key": APININJAS_API_KEY})
         data = response.json()
 
         return data

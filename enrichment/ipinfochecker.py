@@ -1,13 +1,16 @@
 import ipinfo
-import config
-  
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+IPINFO_API_KEY = os.getenv("IPINFO_API_KEY")
 # outputs a json of the details
 def getipdetails(ip, show_exceptions=False):
     try:
         if ip is None:
             return None
         
-        handler = ipinfo.getHandler(access_token=config.IPINFO_API_KEY)
+        handler = ipinfo.getHandler(access_token=IPINFO_API_KEY)
         details = handler.getDetails(ip)
         return details
     except Exception as e:

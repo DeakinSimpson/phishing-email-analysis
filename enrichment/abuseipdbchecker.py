@@ -1,5 +1,9 @@
 import requests
-import config
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+ABUSEIPDB_API_KEY = os.getenv("ABUSEIPDB_API_KEY")
 
 def getabusedata(ip):
     url = 'https://api.abuseipdb.com/api/v2/check'
@@ -11,7 +15,7 @@ def getabusedata(ip):
 
     headers = {
         'Accept': 'application/json',
-        'Key': config.ABUSEIPDB_API_KEY
+        'Key': ABUSEIPDB_API_KEY
     }
     try:
         response = requests.request(method='GET', url=url, headers=headers, params=querystring)
