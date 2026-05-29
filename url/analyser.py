@@ -1,15 +1,11 @@
 from enrichment import domainchecker, virustotal, ipinfochecker, abuseipdbchecker
 from datetime import datetime
 import hashlib
-from dotenv import load_dotenv
-import os
 import cachemethods
 
-load_dotenv()
-URL_CACHE_PATH      = os.getenv("URL_CACHE_PATH")
-EMAIL_CACHE_PATH    = os.getenv("EMAIL_CACHE_PATH")
 
-def extractDataToJSON(email_body, url, file_path, data_index, date=datetime.now()):
+
+def extractDataToJSON(email_body, url, file_path, data_index, URL_CACHE_PATH, EMAIL_CACHE_PATH, date=datetime.now()):
     domain          = domainchecker.urlparse(url)
     cache           = cachemethods.load_cache(URL_CACHE_PATH)
     email_cache     = cachemethods.load_cache(EMAIL_CACHE_PATH)
