@@ -4,3 +4,6 @@ config.py
 *.pkl
 *.csv
 *.json
+parsers/__pycache__/csvpasser.cpython-313.pyc
+cache/url_cache.json
+cache/email_cache.json

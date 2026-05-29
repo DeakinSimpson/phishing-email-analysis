@@ -7,7 +7,7 @@ import traceback
 # this uses virustotal to scan the URL, outputs a JSON
 def virus_total_scan(url, VIRUSTOTAL_API_KEY):
     endpoint = "https://www.virustotal.com/api/v3/urls"
-
+    
     headers = {
         "accept": "application/json",
         "content-type": "application/x-www-form-urlencoded",
@@ -48,7 +48,7 @@ def urlparse(url):
     return domain
     
 # get the whois by using ninjaapi, outputs a json about the domain
-def getdomaininfo(url, APININJAS_API_KEY):
+def whois_apininja_scan(url, APININJAS_API_KEY):
     try:
         domain = urlparse(url)
         response = requests.get("https://api.api-ninjas.com/v1/whois",params={"domain": domain}, headers={"X-Api-Key": APININJAS_API_KEY})
@@ -61,7 +61,7 @@ def getdomaininfo(url, APININJAS_API_KEY):
         return None
     
 # input must be the dict that is returned by getdomaininfo() 
-def getage(domaininfo, date=datetime.now(), print_exceptions=False):
+def get_domain_age(domaininfo, date=datetime.now(), print_exceptions=False):
     try:
         data = {
             "registrar": domaininfo.get("registrar"),
@@ -96,7 +96,7 @@ def getage(domaininfo, date=datetime.now(), print_exceptions=False):
         return None
 
 # gets information about the IP using AbuseIPDB, outputs it to a .json file
-def getabusedata(ip, ABUSEIPDB_API_KEY):
+def abuseipdb_scan(ip, ABUSEIPDB_API_KEY):
     url = 'https://api.abuseipdb.com/api/v2/check'
 
     querystring = {
